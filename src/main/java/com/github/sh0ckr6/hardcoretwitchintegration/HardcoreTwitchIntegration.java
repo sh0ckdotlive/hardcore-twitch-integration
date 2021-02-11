@@ -1,7 +1,6 @@
 package com.github.sh0ckr6.hardcoretwitchintegration;
 
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.ChannelPointRedemptionEventBean;
-import com.github.sh0ckr6.hardcoretwitchintegration.beans.CheerEventBean;
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.EventSubNotificationBean;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
@@ -48,11 +47,7 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
               final ChannelPointRedemptionEventBean channelPointRedemptionBean = gson.fromJson(message, ChannelPointRedemptionEventBean.class);
               handleRedemption(new ChannelPointRedemption(channelPointRedemptionBean));
               break;
-            case "channel.cheer":
-              final CheerEventBean cheerEventBean = gson.fromJson(message, CheerEventBean.class);
-              handleCheer(new Cheer(cheerEventBean));
           }
-          
         }
       
         @Override
@@ -104,10 +99,5 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
         player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 600, 199, true, false, true));
       });
     }
-  }
-  
-  private void handleCheer(Cheer cheer) {
-    player.sendMessage(ChatColor.GOLD + cheer.userName + ChatColor.GRAY + " has cheered " + (cheer.amount < 100 ? ChatColor.GRAY : cheer.amount < 1000 ? ChatColor.LIGHT_PURPLE : cheer.amount < 5000 ? ChatColor.GREEN : cheer.amount < 10000 ? ChatColor.BLUE : ChatColor.RED) + cheer.amount + ChatColor.GRAY + " bits!");
-    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
   }
 }
