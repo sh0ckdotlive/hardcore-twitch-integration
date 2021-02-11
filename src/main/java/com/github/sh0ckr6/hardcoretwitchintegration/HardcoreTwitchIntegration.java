@@ -83,21 +83,23 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
   
   private void handleRedemption(ChannelPointRedemption redemption) {
     if (redemption.rewardTitle.equalsIgnoreCase("Test Reward from CLI")) {
-      /* FIXME: Creeper Spawn */
+      //<editor-fold desc="Spawn Creeper">
 //      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " spawned a creeper" + ChatColor.GRAY + " on you!");
 //      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
 //        final Creeper creeper = (Creeper) player.getWorld().spawnEntity(player.getLocation(), EntityType.CREEPER);
 //        creeper.setMaxFuseTicks(40);
 //        creeper.ignite();
 //      });
+      //</editor-fold>
       
-      /* FIXME: Freeze! */
+      //<editor-fold desc="Freeze!">
       player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " frozen" + ChatColor.GRAY + " you for 30 seconds!");
       player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
         player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 600, 199, true, false, true));
         player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 600, 199, true, false, true));
       });
+      //</editor-fold>
     }
   }
 }
