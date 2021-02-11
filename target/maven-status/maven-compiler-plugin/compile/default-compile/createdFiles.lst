@@ -1,11 +1,9 @@
 com\github\sh0ckr6\hardcoretwitchintegration\beans\ChannelPointRedemptionEventBean$ChannelPointRedemptionRewardBean.class
-com\github\sh0ckr6\hardcoretwitchintegration\beans\CheerEventBean$CheerBean.class
 com\github\sh0ckr6\hardcoretwitchintegration\beans\EventSubNotificationBean.class
-com\github\sh0ckr6\hardcoretwitchintegration\beans\CheerEventBean.class
 com\github\sh0ckr6\hardcoretwitchintegration\ChannelPointRedemption.class
 com\github\sh0ckr6\hardcoretwitchintegration\HardcoreTwitchIntegration$1.class
+com\github\sh0ckr6\hardcoretwitchintegration\listeners\MainListener.class
 com\github\sh0ckr6\hardcoretwitchintegration\beans\ChannelPointRedemptionEventBean$ChannelPointRedemptionBean.class
 com\github\sh0ckr6\hardcoretwitchintegration\beans\ChannelPointRedemptionEventBean.class
 com\github\sh0ckr6\hardcoretwitchintegration\beans\EventSubNotificationBean$EventSubSubscriptionBean.class
 com\github\sh0ckr6\hardcoretwitchintegration\HardcoreTwitchIntegration.class
-com\github\sh0ckr6\hardcoretwitchintegration\Cheer.class
