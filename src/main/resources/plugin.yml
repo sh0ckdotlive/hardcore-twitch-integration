@@ -1,0 +1,11 @@
+name: HardcoreTwitchIntegration
+version: ${project.version}
+main: com.github.sh0ckr6.hardcoretwitchintegration.HardcoreTwitchIntegration
+api-version: 1.15
+prefix: HARDCORE-TI
+authors: [ sh0ckR6 ]
+description: This plugin connects Twitch to Minecraft
+website: https://twitch.tv/sh0ckR6
+commands:
+  ws:
+    description: send a message to the websocket server
