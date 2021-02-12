@@ -2,6 +2,7 @@ package com.github.sh0ckr6.hardcoretwitchintegration;
 
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.ChannelPointRedemptionEventBean;
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.EventSubNotificationBean;
+import com.github.sh0ckr6.hardcoretwitchintegration.listeners.MainListener;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -10,8 +11,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -23,6 +22,7 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
   
   public WebSocketClient WS;
   public Player player;
+  public boolean isPreventedFromBreaking;
   
   @Override
   public void onEnable() {
@@ -66,6 +66,7 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
       e.printStackTrace();
     }
     player = Bukkit.getOnlinePlayers().stream().filter(p -> p.getName().equalsIgnoreCase("sh0ckR6")).findFirst().get();
+    new MainListener(this);
   }
   
   @Override
@@ -84,21 +85,30 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
   private void handleRedemption(ChannelPointRedemption redemption) {
     if (redemption.rewardTitle.equalsIgnoreCase("Test Reward from CLI")) {
       //<editor-fold desc="Spawn Creeper">
-//      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " spawned a creeper" + ChatColor.GRAY + " on you!");
+      //      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " spawned a creeper" + ChatColor.GRAY + " on you!");
 //      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
 //        final Creeper creeper = (Creeper) player.getWorld().spawnEntity(player.getLocation(), EntityType.CREEPER);
 //        creeper.setMaxFuseTicks(40);
 //        creeper.ignite();
 //      });
       //</editor-fold>
-      
-      //<editor-fold desc="Freeze!">
-      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " frozen" + ChatColor.GRAY + " you for 30 seconds!");
+      //<editor-fold desc="No Breaking Blocks">
+      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " prevented you from breaking blocks" + ChatColor.GRAY + " for 30 seconds!");
       player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+      isPreventedFromBreaking = true;
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 600, 199, true, false, true));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 600, 199, true, false, true));
-      });
+        isPreventedFromBreaking = false;
+        player.sendMessage(ChatColor.GRAY + "You can now break blocks again!");
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+      }, 600);
+      //</editor-fold>
+      //<editor-fold desc="Freeze!">
+      //      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " frozen" + ChatColor.GRAY + " you for 30 seconds!");
+//      player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+//      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+//        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 600, 199, true, false, true));
+//        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 600, 199, true, false, true));
+//      });
       //</editor-fold>
     }
   }
