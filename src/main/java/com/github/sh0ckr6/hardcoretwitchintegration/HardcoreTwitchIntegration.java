@@ -85,14 +85,14 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
   }
   
   private void handleHypeTrainStart(HypeTrainStart train) {
-  
+    player.sendMessage("Hype Train has started");
   }
   
   private void handleHypeTrainProgress(HypeTrainProgress train) {
-  
+    player.sendMessage("Someone has contributed to the Hype Train");
   }
   
   private void handleHypeTrainEnd(HypeTrainEnd train) {
-    
+    player.sendMessage("Hype Train has ended");
   }
 }
