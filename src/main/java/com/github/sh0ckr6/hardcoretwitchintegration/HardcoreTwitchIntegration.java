@@ -2,6 +2,7 @@ package com.github.sh0ckr6.hardcoretwitchintegration;
 
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.EventSubNotificationBean;
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.HypeTrainEventBeginBean;
+import com.github.sh0ckr6.hardcoretwitchintegration.beans.HypeTrainEventProgressBean;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -41,6 +42,9 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
             case "channel.hype_train.begin":
               final HypeTrainEventBeginBean hypeTrainEventBeginBean = gson.fromJson(message, HypeTrainEventBeginBean.class);
               handleHypeTrainStart(new HypeTrainStart(hypeTrainEventBeginBean));
+            case "channel.hype_train.progress":
+              final HypeTrainEventProgressBean hypeTrainEventProgressBean = gson.fromJson(message, HypeTrainEventProgressBean.class);
+              handleHypeTrainProgress(new HypeTrainProgress(hypeTrainEventProgressBean));
           }
           
         }
@@ -63,6 +67,8 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
     player = Bukkit.getOnlinePlayers().stream().filter(p -> p.getName().equalsIgnoreCase("sh0ckR6")).findFirst().get();
   }
   
+
+  
   @Override
   public void onDisable() {
     // Plugin shutdown logic
@@ -77,6 +83,10 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
   }
   
   private void handleHypeTrainStart(HypeTrainStart hypeTrainStart) {
+  
+  }
+  
+  private void handleHypeTrainProgress(HypeTrainProgress hypeTrainProgress) {
     
   }
 }
