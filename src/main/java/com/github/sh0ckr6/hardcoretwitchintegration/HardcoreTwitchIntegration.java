@@ -30,6 +30,7 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
   public WebSocketClient WS;
   public Player player;
   public boolean isPreventedFromBreaking;
+  public boolean isPreventedFromInteracting;
   
   @Override
   public void onEnable() {
@@ -108,6 +109,16 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
 //        player.sendMessage(ChatColor.GRAY + "You can now break blocks again!");
 //        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
 //      }, 600);
+      //</editor-fold>
+      //<editor-fold desc="No Interacting (Right Click)">
+      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " prevented you from interacting with anything" + ChatColor.GRAY + " for 30 seconds!");
+      player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+      isPreventedFromInteracting = true;
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        isPreventedFromInteracting = false;
+        player.sendMessage(ChatColor.GRAY + "You can now interact again!");
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+      }, 600);
       //</editor-fold>
       //<editor-fold desc="Freeze!">
 //      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " frozen" + ChatColor.GRAY + " you for 30 seconds!");
