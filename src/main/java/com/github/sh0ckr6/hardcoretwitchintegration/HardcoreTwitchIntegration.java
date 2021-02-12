@@ -84,15 +84,15 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
     return false;
   }
   
-  private void handleHypeTrainStart(HypeTrainStart hypeTrainStart) {
+  private void handleHypeTrainStart(HypeTrainStart train) {
   
   }
   
-  private void handleHypeTrainProgress(HypeTrainProgress hypeTrainProgress) {
+  private void handleHypeTrainProgress(HypeTrainProgress train) {
   
   }
   
-  private void handleHypeTrainEnd(HypeTrainEnd hypeTrainEnd) {
+  private void handleHypeTrainEnd(HypeTrainEnd train) {
     
   }
 }
