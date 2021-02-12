@@ -91,26 +91,25 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
   }
   
   private void handleRedemption(ChannelPointRedemption redemption) {
-    if (redemption.rewardTitle.equalsIgnoreCase("Test Reward from CLI")) {
-      //<editor-fold desc="Spawn Creeper">
-//      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " spawned a creeper" + ChatColor.GRAY + " on you!");
-//      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-//        final Creeper creeper = (Creeper) player.getWorld().spawnEntity(player.getLocation(), EntityType.CREEPER);
-//        creeper.setMaxFuseTicks(40);
-//        creeper.ignite();
-//      });
-      //</editor-fold>
-      //<editor-fold desc="No Breaking Blocks">
-//      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " prevented you from breaking blocks" + ChatColor.GRAY + " for 30 seconds!");
-//      player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
-//      isPreventedFromBreaking = true;
-//      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-//        isPreventedFromBreaking = false;
-//        player.sendMessage(ChatColor.GRAY + "You can now break blocks again!");
-//        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
-//      }, 600);
-      //</editor-fold>
-      //<editor-fold desc="No Interacting (Right Click)">
+    if (redemption.rewardTitle.equalsIgnoreCase("Spawn Creeper")) {
+      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " spawned a creeper" + ChatColor.GRAY + " on you!");
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        final Creeper creeper = (Creeper) player.getWorld().spawnEntity(player.getLocation(), EntityType.CREEPER);
+        creeper.setMaxFuseTicks(40);
+        creeper.ignite();
+      });
+    }
+    if (redemption.rewardTitle.equalsIgnoreCase("No Breaking Blocks")) {
+      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " prevented you from breaking blocks" + ChatColor.GRAY + " for 30 seconds!");
+      player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+      isPreventedFromBreaking = true;
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        isPreventedFromBreaking = false;
+        player.sendMessage(ChatColor.GRAY + "You can now break blocks again!");
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+      }, 600);
+    }
+    if (redemption.rewardTitle.equalsIgnoreCase("No Interacting (Right Click)")) {
       player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " prevented you from interacting with anything" + ChatColor.GRAY + " for 30 seconds!");
       player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
       isPreventedFromInteracting = true;
@@ -119,16 +118,16 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
         player.sendMessage(ChatColor.GRAY + "You can now interact again!");
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
       }, 600);
-      //</editor-fold>
-      //<editor-fold desc="Freeze!">
-//      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " frozen" + ChatColor.GRAY + " you for 30 seconds!");
-//      player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
-//      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-//        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 600, 199, true, false, true));
-//        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 600, 199, true, false, true));
-//      });
-      //</editor-fold>
-      //<editor-fold desc="Roll the Dice">
+    }
+    if (redemption.rewardTitle.equalsIgnoreCase("Freeze!")) {
+      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " frozen" + ChatColor.GRAY + " you for 30 seconds!");
+      player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 600, 199, true, false, true));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 600, 199, true, false, true));
+      });
+    }
+    if (redemption.rewardTitle.equalsIgnoreCase("Roll the Dice")) {
       Random random = new Random();
       final int diceRoll = random.nextInt(7) + 1;
       player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " rolled the dice!");
@@ -169,7 +168,6 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
             break;
         }
       }, 100);
-      //</editor-fold>
     }
   }
 }
