@@ -1,6 +1,7 @@
 package com.github.sh0ckr6.hardcoretwitchintegration;
 
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.EventSubNotificationBean;
+import com.github.sh0ckr6.hardcoretwitchintegration.beans.HypeTrainEventBeginBean;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -37,7 +38,9 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
           Gson gson = new Gson();
           final EventSubNotificationBean notification = gson.fromJson(message, EventSubNotificationBean.class);
           switch (notification.subscription.type) {
-          
+            case "channel.hype_train.begin":
+              final HypeTrainEventBeginBean hypeTrainEventBeginBean = gson.fromJson(message, HypeTrainEventBeginBean.class);
+              handleHypeTrainStart(new HypeTrainStart(hypeTrainEventBeginBean));
           }
           
         }
@@ -71,5 +74,9 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
       WS.send(args[0]);
     }
     return false;
+  }
+  
+  private void handleHypeTrainStart(HypeTrainStart hypeTrainStart) {
+    
   }
 }
