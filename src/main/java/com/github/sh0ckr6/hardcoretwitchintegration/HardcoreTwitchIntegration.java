@@ -1,18 +1,12 @@
 package com.github.sh0ckr6.hardcoretwitchintegration;
 
-import com.github.sh0ckr6.hardcoretwitchintegration.beans.ChannelPointRedemptionEventBean;
-import com.github.sh0ckr6.hardcoretwitchintegration.beans.CheerEventBean;
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.EventSubNotificationBean;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -43,14 +37,7 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
           Gson gson = new Gson();
           final EventSubNotificationBean notification = gson.fromJson(message, EventSubNotificationBean.class);
           switch (notification.subscription.type) {
-            case "channel.channel_points_custom_reward_redemption.add":
-              getLogger().log(Level.INFO, "Made it to handling channel point redemptions");
-              final ChannelPointRedemptionEventBean channelPointRedemptionBean = gson.fromJson(message, ChannelPointRedemptionEventBean.class);
-              handleRedemption(new ChannelPointRedemption(channelPointRedemptionBean));
-              break;
-            case "channel.cheer":
-              final CheerEventBean cheerEventBean = gson.fromJson(message, CheerEventBean.class);
-              handleCheer(new Cheer(cheerEventBean));
+          
           }
           
         }
@@ -84,30 +71,5 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
       WS.send(args[0]);
     }
     return false;
-  }
-  
-  private void handleRedemption(ChannelPointRedemption redemption) {
-    if (redemption.rewardTitle.equalsIgnoreCase("Test Reward from CLI")) {
-      /* FIXME: Creeper Spawn */
-//      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " spawned a creeper" + ChatColor.GRAY + " on you!");
-//      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-//        final Creeper creeper = (Creeper) player.getWorld().spawnEntity(player.getLocation(), EntityType.CREEPER);
-//        creeper.setMaxFuseTicks(40);
-//        creeper.ignite();
-//      });
-      
-      /* FIXME: Freeze! */
-      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " frozen" + ChatColor.GRAY + " you for 30 seconds!");
-      player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
-      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 600, 199, true, false, true));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 600, 199, true, false, true));
-      });
-    }
-  }
-  
-  private void handleCheer(Cheer cheer) {
-    player.sendMessage(ChatColor.GOLD + cheer.userName + ChatColor.GRAY + " has cheered " + (cheer.amount < 100 ? ChatColor.GRAY : cheer.amount < 1000 ? ChatColor.LIGHT_PURPLE : cheer.amount < 5000 ? ChatColor.GREEN : cheer.amount < 10000 ? ChatColor.BLUE : ChatColor.RED) + cheer.amount + ChatColor.GRAY + " bits!");
-    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
   }
 }
