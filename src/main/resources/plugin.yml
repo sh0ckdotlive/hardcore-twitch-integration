@@ -9,3 +9,5 @@ website: https://twitch.tv/sh0ckR6
 commands:
   ws:
     description: send a message to the websocket server
+  resub:
+    description: send a resub message
