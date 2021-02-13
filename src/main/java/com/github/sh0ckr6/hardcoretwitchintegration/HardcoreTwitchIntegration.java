@@ -4,10 +4,7 @@ import com.github.sh0ckr6.hardcoretwitchintegration.beans.ChannelPointRedemption
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.EventSubNotificationBean;
 import com.github.sh0ckr6.hardcoretwitchintegration.listeners.MainListener;
 import com.google.gson.Gson;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Creeper;
@@ -168,6 +165,20 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
             break;
         }
       }, 100);
+    }
+    if (redemption.rewardTitle.equalsIgnoreCase("Anvil Rain")) {
+      player.sendMessage(ChatColor.GRAY + "And in today's forecast, " + ChatColor.RED + "heavy anvil rain" + ChatColor.GRAY + "!");
+      Random random = new Random();
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        for (int x = -5; x <= 5; x++) {
+          for (int z = -5; z <= 5; z++) {
+            final boolean willSpawnAnvil = random.nextBoolean();
+            if (!willSpawnAnvil) continue;
+            Location spawnLocation = new Location(player.getWorld(), player.getLocation().getX() + x, player.getLocation().getY() + 20, player.getLocation().getZ() + z);
+            player.getWorld().getBlockAt(spawnLocation).setType(Material.ANVIL);
+          }
+        }
+      });
     }
   }
 }
