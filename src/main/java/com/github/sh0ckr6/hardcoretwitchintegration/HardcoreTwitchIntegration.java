@@ -4,6 +4,8 @@ import com.github.sh0ckr6.hardcoretwitchintegration.beans.EventSubNotificationBe
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.SubscriptionEventBean;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -78,6 +80,12 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
   }
   
   private void handleSubscription(Subscription sub) {
-    
+    if (sub.tier != 3) {
+      player.sendTitle(ChatColor.GOLD + sub.userLogin + ChatColor.RED + (sub.isGift ? " was gifted a tier " + sub.tier + " sub!" : " just subscribed at tier " + sub.tier + "!"), null, 10, 120, 20);
+      player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
+    } else {
+      player.sendTitle(ChatColor.GOLD + sub.userLogin + ChatColor.RED + (sub.isGift ? " was gifted a tier 3 sub!" : " just subscribed at tier 3!"), null, 10, 200, 20);
+      player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 0.25f, 1);
+    }
   }
 }
