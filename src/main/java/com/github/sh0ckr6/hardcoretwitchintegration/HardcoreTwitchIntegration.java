@@ -7,9 +7,7 @@ import com.google.gson.Gson;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Creeper;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
@@ -177,6 +175,15 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
             Location spawnLocation = new Location(player.getWorld(), player.getLocation().getX() + x, player.getLocation().getY() + 20, player.getLocation().getZ() + z);
             player.getWorld().getBlockAt(spawnLocation).setType(Material.ANVIL);
           }
+        }
+      });
+    }
+    if (redemption.rewardTitle.equalsIgnoreCase("Slime Party")) {
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        player.sendMessage(ChatColor.GREEN + "Slime party!");
+        for (int i = 0; i < 10; i++) {
+          final Slime slime = (Slime) player.getWorld().spawnEntity(player.getLocation(), EntityType.SLIME);
+          slime.setSize(1);
         }
       });
     }
