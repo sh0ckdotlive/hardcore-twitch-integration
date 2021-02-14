@@ -1,15 +1,14 @@
 package com.github.sh0ckr6.hardcoretwitchintegration;
 
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.ChannelPointRedemptionEventBean;
-import com.github.sh0ckr6.hardcoretwitchintegration.beans.CheerEventBean;
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.EventSubNotificationBean;
+import com.github.sh0ckr6.hardcoretwitchintegration.listeners.MainListener;
 import com.google.gson.Gson;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -18,12 +17,15 @@ import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Random;
 import java.util.logging.Level;
 
 public final class HardcoreTwitchIntegration extends JavaPlugin {
   
   public WebSocketClient WS;
   public Player player;
+  public boolean isPreventedFromBreaking;
+  public boolean isPreventedFromInteracting;
   
   @Override
   public void onEnable() {
@@ -48,11 +50,7 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
               final ChannelPointRedemptionEventBean channelPointRedemptionBean = gson.fromJson(message, ChannelPointRedemptionEventBean.class);
               handleRedemption(new ChannelPointRedemption(channelPointRedemptionBean));
               break;
-            case "channel.cheer":
-              final CheerEventBean cheerEventBean = gson.fromJson(message, CheerEventBean.class);
-              handleCheer(new Cheer(cheerEventBean));
           }
-          
         }
       
         @Override
@@ -71,6 +69,7 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
       e.printStackTrace();
     }
     player = Bukkit.getOnlinePlayers().stream().filter(p -> p.getName().equalsIgnoreCase("sh0ckR6")).findFirst().get();
+    new MainListener(this);
   }
   
   @Override
@@ -87,16 +86,35 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
   }
   
   private void handleRedemption(ChannelPointRedemption redemption) {
-    if (redemption.rewardTitle.equalsIgnoreCase("Test Reward from CLI")) {
-      /* FIXME: Creeper Spawn */
-//      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " spawned a creeper" + ChatColor.GRAY + " on you!");
-//      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-//        final Creeper creeper = (Creeper) player.getWorld().spawnEntity(player.getLocation(), EntityType.CREEPER);
-//        creeper.setMaxFuseTicks(40);
-//        creeper.ignite();
-//      });
-      
-      /* FIXME: Freeze! */
+    if (redemption.rewardTitle.equalsIgnoreCase("Spawn Creeper")) {
+      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " spawned a creeper" + ChatColor.GRAY + " on you!");
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        final Creeper creeper = (Creeper) player.getWorld().spawnEntity(player.getLocation(), EntityType.CREEPER);
+        creeper.setMaxFuseTicks(40);
+        creeper.ignite();
+      });
+    }
+    if (redemption.rewardTitle.equalsIgnoreCase("No Breaking Blocks")) {
+      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " prevented you from breaking blocks" + ChatColor.GRAY + " for 30 seconds!");
+      player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+      isPreventedFromBreaking = true;
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        isPreventedFromBreaking = false;
+        player.sendMessage(ChatColor.GRAY + "You can now break blocks again!");
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+      }, 600);
+    }
+    if (redemption.rewardTitle.equalsIgnoreCase("No Interacting (Right Click)")) {
+      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " prevented you from interacting with anything" + ChatColor.GRAY + " for 30 seconds!");
+      player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+      isPreventedFromInteracting = true;
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        isPreventedFromInteracting = false;
+        player.sendMessage(ChatColor.GRAY + "You can now interact again!");
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+      }, 600);
+    }
+    if (redemption.rewardTitle.equalsIgnoreCase("Freeze!")) {
       player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " frozen" + ChatColor.GRAY + " you for 30 seconds!");
       player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
@@ -104,10 +122,70 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
         player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 600, 199, true, false, true));
       });
     }
-  }
-  
-  private void handleCheer(Cheer cheer) {
-    player.sendMessage(ChatColor.GOLD + cheer.userName + ChatColor.GRAY + " has cheered " + (cheer.amount < 100 ? ChatColor.GRAY : cheer.amount < 1000 ? ChatColor.LIGHT_PURPLE : cheer.amount < 5000 ? ChatColor.GREEN : cheer.amount < 10000 ? ChatColor.BLUE : ChatColor.RED) + cheer.amount + ChatColor.GRAY + " bits!");
-    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+    if (redemption.rewardTitle.equalsIgnoreCase("Roll the Dice")) {
+      Random random = new Random();
+      final int diceRoll = random.nextInt(7) + 1;
+      player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " rolled the dice!");
+      player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has rolled a " + ChatColor.RED + diceRoll);
+        switch (diceRoll) {
+          case 1:
+            final Creeper creeper = (Creeper) player.getWorld().spawnEntity(player.getLocation(), EntityType.CREEPER);
+            creeper.setMaxFuseTicks(40);
+            creeper.ignite();
+            player.sendMessage(ChatColor.RED + "Tick, tick, boom!");
+            break;
+          case 2:
+            player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
+            player.sendMessage(ChatColor.GRAY + "Enjoy your " + ChatColor.DARK_GREEN + "poison" + ChatColor.GRAY + "!");
+            break;
+          case 3:
+            player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " was " + ChatColor.RED + "scammed out of their points" + ChatColor.GRAY + "! Better luck next time!");
+            break;
+          case 4:
+            player.getInventory().addItem(new ItemStack(Material.IRON_INGOT, 10));
+            player.sendMessage(ChatColor.GRAY + "Enjoy your " + ChatColor.WHITE + "10 iron ingots!");
+            break;
+          case 5:
+            player.getInventory().addItem(new ItemStack(Material.DIAMOND));
+            player.sendMessage(ChatColor.GRAY + "A " + ChatColor.AQUA + "shiny diamond" + ChatColor.GRAY + " just for you!");
+            break;
+          case 6:
+            final int potionEffect = random.nextInt(PotionEffectType.values().length);
+            //noinspection ConstantConditions
+            player.addPotionEffect(new PotionEffect(PotionEffectType.getByName(PotionEffectType.values()[potionEffect].getName()), 600, 0, false, true, true));
+            player.sendMessage(ChatColor.GRAY + "I hope whatever " + ChatColor.RED + "potion effect " + ChatColor.GRAY + "you just got helps!");
+            break;
+          case 7:
+            player.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION, 300, 0));
+            player.sendMessage(ChatColor.GRAY + "Enjoy your " + ChatColor.RED + "flight" + ChatColor.GRAY + "!");
+            break;
+        }
+      }, 100);
+    }
+    if (redemption.rewardTitle.equalsIgnoreCase("Anvil Rain")) {
+      player.sendMessage(ChatColor.GRAY + "And in today's forecast, " + ChatColor.RED + "heavy anvil rain" + ChatColor.GRAY + "!");
+      Random random = new Random();
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        for (int x = -5; x <= 5; x++) {
+          for (int z = -5; z <= 5; z++) {
+            final boolean willSpawnAnvil = random.nextBoolean();
+            if (!willSpawnAnvil) continue;
+            Location spawnLocation = new Location(player.getWorld(), player.getLocation().getX() + x, player.getLocation().getY() + 20, player.getLocation().getZ() + z);
+            player.getWorld().getBlockAt(spawnLocation).setType(Material.ANVIL);
+          }
+        }
+      });
+    }
+    if (redemption.rewardTitle.equalsIgnoreCase("Slime Party")) {
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        player.sendMessage(ChatColor.GREEN + "Slime party!");
+        for (int i = 0; i < 10; i++) {
+          final Slime slime = (Slime) player.getWorld().spawnEntity(player.getLocation(), EntityType.SLIME);
+          slime.setSize(1);
+        }
+      });
+    }
   }
 }
