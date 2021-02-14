@@ -40,9 +40,13 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
     getLogger().log(Level.INFO, "Successfully opened HardcoreTwitchIntegration");
     attemptWebSocketConnection();
     player = Bukkit.getOnlinePlayers().stream().filter(p -> p.getName().equalsIgnoreCase("sh0ckR6")).findFirst().get();
-  
+    registerListeners();
     registerCommands();
     registerGifts();
+  }
+  
+  private void registerListeners() {
+    new MainListener(this);
   }
   
   private void registerGifts() {
@@ -271,7 +275,6 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
       e.printStackTrace();
     }
     player = Bukkit.getOnlinePlayers().stream().filter(p -> p.getName().equalsIgnoreCase("sh0ckR6")).findFirst().get();
-    new MainListener(this);
   }
   
   private void handleRedemption(ChannelPointRedemption redemption) {
