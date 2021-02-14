@@ -193,44 +193,6 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
     return false;
   }
   
-  public void handleSubscription(Subscription sub) {
-    List<Gift<?>> gifts = new ArrayList<>();
-    for (Gift<?> gift :
-            this.gifts) {
-      System.out.println("gift.tier = " + gift.tier);
-      System.out.println("sub.tier = " + sub.tier);
-      if (gift.tier == sub.tier) gifts.add(gift);
-    }
-    System.out.println(gifts.size());
-    Random random = new Random();
-    final int giftIndex = random.nextInt(gifts.size());
-    Gift<?> gift = gifts.get(giftIndex);
-    if (gift.items.stream().allMatch(ItemStack.class::isInstance)) {
-      for (ItemStack item : ((List<ItemStack>) gift.items)) {
-        player.getInventory().addItem(item);
-      }
-    } else if (gift.items.stream().allMatch(Entity.class::isInstance)) {
-      for (Entity entity : ((List<Entity>) gift.items)) {
-        entity.teleport(player.getLocation());
-      }
-    } else if (gift.items.stream().allMatch(Runnable.class::isInstance)) {
-      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-        for (Runnable runnable : ((List<Runnable>) gift.items)) {
-          runnable.run();
-        }
-      });
-    }
-    
-    if (sub.tier != 3) {
-      player.sendTitle(ChatColor.GOLD + sub.userLogin + ChatColor.RED + (sub.isGift ? " was gifted a tier " + sub.tier + " sub!" : " just subscribed at tier " + sub.tier + "!"), null, 10, 120, 20);
-      player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
-      
-    } else {
-      player.sendTitle(ChatColor.GOLD + sub.userLogin + ChatColor.RED + (sub.isGift ? " was gifted a tier 3 sub!" : " just subscribed at tier 3!"), null, 10, 200, 20);
-      player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 0.25f, 1);
-    }
-  }
-  
   private void attemptWebSocketConnection() {
     try {
       WS = new WebSocketClient(new URI("ws://localhost:8082")) {
@@ -277,6 +239,43 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
     player = Bukkit.getOnlinePlayers().stream().filter(p -> p.getName().equalsIgnoreCase("sh0ckR6")).findFirst().get();
   }
   
+  public void handleSubscription(Subscription sub) {
+    List<Gift<?>> gifts = new ArrayList<>();
+    for (Gift<?> gift :
+            this.gifts) {
+      System.out.println("gift.tier = " + gift.tier);
+      System.out.println("sub.tier = " + sub.tier);
+      if (gift.tier == sub.tier) gifts.add(gift);
+    }
+    System.out.println(gifts.size());
+    Random random = new Random();
+    final int giftIndex = random.nextInt(gifts.size());
+    Gift<?> gift = gifts.get(giftIndex);
+    if (gift.items.stream().allMatch(ItemStack.class::isInstance)) {
+      for (ItemStack item : ((List<ItemStack>) gift.items)) {
+        player.getInventory().addItem(item);
+      }
+    } else if (gift.items.stream().allMatch(Entity.class::isInstance)) {
+      for (Entity entity : ((List<Entity>) gift.items)) {
+        entity.teleport(player.getLocation());
+      }
+    } else if (gift.items.stream().allMatch(Runnable.class::isInstance)) {
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        for (Runnable runnable : ((List<Runnable>) gift.items)) {
+          runnable.run();
+        }
+      });
+    }
+    
+    if (sub.tier != 3) {
+      player.sendTitle(ChatColor.GOLD + sub.userLogin + ChatColor.RED + (sub.isGift ? " was gifted a tier " + sub.tier + " sub!" : " just subscribed at tier " + sub.tier + "!"), null, 10, 120, 20);
+      player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 1, 1);
+      
+    } else {
+      player.sendTitle(ChatColor.GOLD + sub.userLogin + ChatColor.RED + (sub.isGift ? " was gifted a tier 3 sub!" : " just subscribed at tier 3!"), null, 10, 200, 20);
+      player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 0.25f, 1);
+    }
+  }
   private void handleRedemption(ChannelPointRedemption redemption) {
     if (redemption.rewardTitle.equalsIgnoreCase("Spawn Creeper")) {
       player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " spawned a creeper" + ChatColor.GRAY + " on you!");
