@@ -187,5 +187,8 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
         }
       });
     }
+    if (redemption.rewardTitle.equalsIgnoreCase("Play a Sound")) {
+      player.playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 1.0f, 1.5f);
+    }
   }
 }
