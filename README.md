@@ -3,9 +3,6 @@ Welcome to the hardcore-twitch-integration repository! This repository is to sto
 This bukkit plugin does require a working WebSocket server that can connect to the Twitch API, so the plugin won't work from compilation. This is also why there will be no releases published until the plugin is refined.
 
 ## FAQ
-### Why are there no commits?
-The only changes that will be published to this repository are README.md changes. All other changes will be stored locally until Friday when I reveal the full plugin [live on stream](https://twitch.tv/sh0ckR6) (I don't want to be spoiling the surprise, now do I?)
-
 ### Will this plugin ever become available for release?
 Yes! I plan on fully developing this plugin and publishing stable releases for users to download and use in their own streams!
 
