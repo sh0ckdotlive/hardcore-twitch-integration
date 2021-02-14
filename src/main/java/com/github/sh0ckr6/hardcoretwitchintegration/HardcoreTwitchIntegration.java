@@ -1,5 +1,6 @@
 package com.github.sh0ckr6.hardcoretwitchintegration;
 
+import com.github.sh0ckr6.hardcoretwitchintegration.beans.ChannelPointRedemptionEventBean;
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.CheerEventBean;
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.EventSubNotificationBean;
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.SubscriptionEventBean;
@@ -248,6 +249,9 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
             case "channel.cheer":
               final CheerEventBean cheerEventBean = gson.fromJson(message, CheerEventBean.class);
               handleCheer(new Cheer(cheerEventBean));
+            case "channel.channel_points_custom_reward_redemption.add":
+              final ChannelPointRedemptionEventBean channelPointRedemptionEventBean = gson.fromJson(message, ChannelPointRedemptionEventBean.class);
+              handleRedemption(new ChannelPointRedemption(channelPointRedemptionEventBean));
           }
         }
         
@@ -302,6 +306,10 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
     if (redemption.rewardTitle.equalsIgnoreCase("Freeze!")) {
       player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " frozen" + ChatColor.GRAY + " you for 30 seconds!");
       player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 200, 99, true, false, true));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 200, 199, true, false, true));
+      });
     }
     if (redemption.rewardTitle.equalsIgnoreCase("Roll the Dice")) {
       Random random = new Random();
