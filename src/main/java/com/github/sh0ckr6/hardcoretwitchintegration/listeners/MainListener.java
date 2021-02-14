@@ -7,6 +7,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public class MainListener implements Listener {
   
@@ -34,5 +35,12 @@ public class MainListener implements Listener {
   public void onPlayerItemConsume(PlayerItemConsumeEvent event) {
     if (!plugin.isPreventedFromInteracting) return;
     event.setCancelled(true);
+  }
+  
+  @EventHandler(ignoreCancelled = true)
+  public void onPlayerJoin(PlayerJoinEvent event) {
+    if (event.getPlayer().getName().equalsIgnoreCase("sh0ckR6")) {
+      plugin.player = event.getPlayer();
+    }
   }
 }
