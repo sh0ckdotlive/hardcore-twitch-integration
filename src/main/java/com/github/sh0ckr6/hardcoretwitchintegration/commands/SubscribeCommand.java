@@ -1,15 +1,20 @@
 package com.github.sh0ckr6.hardcoretwitchintegration.commands;
 
 import com.github.sh0ckr6.hardcoretwitchintegration.HardcoreTwitchIntegration;
+import com.github.sh0ckr6.hardcoretwitchintegration.gift.Gift;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Entity;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class SubscribeCommand implements CommandExecutor, TabCompleter {
   
@@ -35,7 +40,38 @@ public class SubscribeCommand implements CommandExecutor, TabCompleter {
       plugin.player.sendTitle(ChatColor.GOLD + userLogin + ChatColor.RED + (isGift ? " was gifted a tier 3 sub!" : " just subscribed at tier 3!"), ChatColor.GRAY + "They have been subscribed for " + ChatColor.RED + months + ChatColor.GRAY + " months!", 10, 200, 20);
       plugin.player.playSound(plugin.player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 0.25f, 1);
     }
-    return false;
+    
+    handleSubscription(tier);
+    return true;
+  }
+  
+  public void handleSubscription(int tier) {
+    List<Gift<?>> gifts = new ArrayList<>();
+    for (Gift<?> gift :
+            plugin.gifts) {
+      System.out.println("gift.tier = " + gift.tier);
+      System.out.println("sub.tier = " + tier);
+      if (gift.tier == tier) gifts.add(gift);
+    }
+    System.out.println(gifts.size());
+    Random random = new Random();
+    final int giftIndex = random.nextInt(gifts.size());
+    Gift<?> gift = gifts.get(giftIndex);
+    if (gift.items.stream().allMatch(ItemStack.class::isInstance)) {
+      for (ItemStack item : ((List<ItemStack>) gift.items)) {
+        plugin.player.getInventory().addItem(item);
+      }
+    } else if (gift.items.stream().allMatch(Entity.class::isInstance)) {
+      for (Entity entity : ((List<Entity>) gift.items)) {
+        entity.teleport(plugin.player.getLocation());
+      }
+    } else if (gift.items.stream().allMatch(Runnable.class::isInstance)) {
+      Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+        for (Runnable runnable : ((List<Runnable>) gift.items)) {
+          runnable.run();
+        }
+      });
+    }
   }
   
   @Override
