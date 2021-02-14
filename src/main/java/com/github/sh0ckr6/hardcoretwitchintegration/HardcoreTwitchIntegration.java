@@ -1,28 +1,24 @@
 package com.github.sh0ckr6.hardcoretwitchintegration;
 
-import com.github.sh0ckr6.hardcoretwitchintegration.beans.ChannelPointRedemptionEventBean;
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.EventSubNotificationBean;
-import com.github.sh0ckr6.hardcoretwitchintegration.listeners.MainListener;
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.SubscriptionEventBean;
 import com.github.sh0ckr6.hardcoretwitchintegration.commands.SubscribeCommand;
 import com.github.sh0ckr6.hardcoretwitchintegration.gift.Gift;
+import com.github.sh0ckr6.hardcoretwitchintegration.listeners.MainListener;
 import com.google.gson.Gson;
 import org.bukkit.*;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Random;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -268,19 +264,6 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
     }
     player = Bukkit.getOnlinePlayers().stream().filter(p -> p.getName().equalsIgnoreCase("sh0ckR6")).findFirst().get();
     new MainListener(this);
-  }
-  
-  @Override
-  public void onDisable() {
-    // Plugin shutdown logic
-  }
-  
-  @Override
-  public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-    if (label.equalsIgnoreCase("ws")) {
-      WS.send(args[0]);
-    }
-    return false;
   }
   
   private void handleRedemption(ChannelPointRedemption redemption) {
