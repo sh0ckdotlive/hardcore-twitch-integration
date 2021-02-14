@@ -5,11 +5,16 @@ import com.github.sh0ckr6.hardcoretwitchintegration.beans.EventSubNotificationBe
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -81,5 +86,55 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
   private void handleCheer(Cheer cheer) {
     player.sendMessage(ChatColor.GOLD + cheer.userName + ChatColor.GRAY + " has cheered " + (cheer.amount < 100 ? ChatColor.GRAY : cheer.amount < 1000 ? ChatColor.LIGHT_PURPLE : cheer.amount < 5000 ? ChatColor.GREEN : cheer.amount < 10000 ? ChatColor.BLUE : ChatColor.RED) + cheer.amount + ChatColor.GRAY + " bits!");
     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
+    
+    if (cheer.amount == 69) {
+      player.sendMessage(ChatColor.GRAY + "nice");
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> player.getWorld().spawnEntity(player.getLocation(), EntityType.SNOWMAN));
+    } else if (cheer.amount == 100) {
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        player.getInventory().addItem(new ItemStack(Material.IRON_ORE, 32));
+      });
+    } else if (cheer.amount == 420) {
+      player.sendMessage(ChatColor.GRAY + "Ayyyyyy");
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+      });
+    } else if (cheer.amount == 666) {
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
+      });
+    } else if (cheer.amount == 911) {
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 99, false, true, true));
+      });
+    } else if (cheer.amount == 6666) {
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+      });
+    } else if (cheer.amount == 10000) {
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kill sh0ckR6"));
+    }
   }
 }
