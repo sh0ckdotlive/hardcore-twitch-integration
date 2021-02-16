@@ -7,6 +7,7 @@ import com.github.sh0ckr6.hardcoretwitchintegration.beans.SubscriptionEventBean;
 import com.github.sh0ckr6.hardcoretwitchintegration.commands.SubscribeCommand;
 import com.github.sh0ckr6.hardcoretwitchintegration.gift.Gift;
 import com.github.sh0ckr6.hardcoretwitchintegration.listeners.MainListener;
+import com.github.sh0ckr6.hardcoretwitchintegration.managers.ConfigManager;
 import com.google.gson.Gson;
 import org.bukkit.*;
 import org.bukkit.command.Command;
@@ -34,6 +35,8 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
   public boolean isPreventedFromInteracting;
   public List<Gift<?>> gifts = new ArrayList<>();
   
+  private ConfigManager configManager;
+  
   @Override
   public void onEnable() {
     // Plugin startup logic
@@ -43,6 +46,7 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
     registerListeners();
     registerCommands();
     registerGifts();
+    registerConfigs();
   }
   
   private void registerListeners() {
@@ -178,6 +182,11 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
   
   private void registerCommands() {
     new SubscribeCommand(this);
+  }
+  
+  private void registerConfigs() {
+    configManager = new ConfigManager();
+    configManager.setup(this);
   }
   
   @Override
