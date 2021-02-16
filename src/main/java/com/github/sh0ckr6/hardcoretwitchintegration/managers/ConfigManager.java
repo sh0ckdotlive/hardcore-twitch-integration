@@ -55,6 +55,10 @@ public class ConfigManager {
     }
   }
   
+  public void deleteConfig(FileConfiguration config) {
+    configurationFileMap.remove(config);
+  }
+  
   public void reloadConfigs() {
     for (FileConfiguration fileConfiguration : configurationFileMap.keySet()) {
       fileConfiguration = YamlConfiguration.loadConfiguration(configurationFileMap.get(fileConfiguration));
