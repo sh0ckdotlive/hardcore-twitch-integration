@@ -7,86 +7,57 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 public class ConfigManager {
   
-  public FileConfiguration mainConfig;
-  public FileConfiguration channelPointsConfig;
-  public FileConfiguration bitsConfig;
-  public FileConfiguration subsConfig;
-  public File mainConfigFile;
-  public File channelPointsConfigFile;
-  public File bitsConfigFile;
-  public File subsConfigFile;
+  private final HardcoreTwitchIntegration plugin;
+  private Map<FileConfiguration, File> configurationFileMap;
   
-  public void setup(HardcoreTwitchIntegration plugin) {
+  public ConfigManager(HardcoreTwitchIntegration plugin) {
+    this.plugin = plugin;
+    setup();
+  }
+  
+  private void setup() {
     if (!plugin.getDataFolder().exists()) {
       plugin.getDataFolder().mkdir();
     }
-    
-    mainConfigFile = new File(plugin.getDataFolder(), "config.yml");
-    channelPointsConfigFile = new File(plugin.getDataFolder(), "points.yml");
-    bitsConfigFile = new File(plugin.getDataFolder(), "bits.yml");
-    subsConfigFile = new File(plugin.getDataFolder(), "subs.yml");
-    
-    if (!mainConfigFile.exists()) {
-      try {
-        mainConfigFile.createNewFile();
-      } catch (IOException e) {
-        plugin.getLogger().severe("Could not create config.yml file");
-      }
-    }
-    if (!channelPointsConfigFile.exists()) {
-      try {
-        channelPointsConfigFile.createNewFile();
-      } catch (IOException e) {
-        plugin.getLogger().severe("Could not create points.yml file");
-      }
-    }
-    if (!bitsConfigFile.exists()) {
-      try {
-        bitsConfigFile.createNewFile();
-      } catch (IOException e) {
-        plugin.getLogger().severe("Could not create bits.yml file");
-      }
-    }
-    if (!subsConfigFile.exists()) {
-      try {
-        subsConfigFile.createNewFile();
-      } catch (IOException e) {
-        plugin.getLogger().severe("Could not create subs.yml file");
-      }
-    }
-    
-    mainConfig = YamlConfiguration.loadConfiguration(mainConfigFile);
-    mainConfig.options().copyDefaults(true);
-    plugin.getLogger().info("Created config.yml");
-    
-    channelPointsConfig = YamlConfiguration.loadConfiguration(channelPointsConfigFile);
-    channelPointsConfig.options().copyDefaults(true);
-    plugin.getLogger().info("Created points.yml");
-    
-    bitsConfig = YamlConfiguration.loadConfiguration(bitsConfigFile);
-    bitsConfig.options().copyDefaults(true);
-    plugin.getLogger().info("Created bits.yml");
-    
-    subsConfig = YamlConfiguration.loadConfiguration(subsConfigFile);
-    subsConfig.options().copyDefaults(true);
-    plugin.getLogger().info("Created subs.yml");
   }
   
-  public void saveConfig(FileConfiguration config, File configFile) {
+  public void createConfig(String name) {
+    File configFile = new File(plugin.getDataFolder(), name + ".yml");
+    if (!configFile.exists()) {
+      try {
+        configFile.createNewFile();
+      } catch (IOException e) {
+        plugin.getLogger().severe("Could not create file " + configFile.getName());
+        e.printStackTrace();
+      }
+    }
+    FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
+    configurationFileMap.put(config, configFile);
+  }
+  
+  public FileConfiguration getConfig(String name) {
+    if (configurationFileMap.keySet().stream().noneMatch(config -> config.getName().equalsIgnoreCase(name))) return null;
+    return configurationFileMap.keySet().stream()
+            .filter(config -> config.getName().equalsIgnoreCase(name))
+            .findFirst()
+            .get();
+  }
+  
+  public void saveConfig(FileConfiguration config) {
     try {
-      config.save(configFile);
+      config.save(configurationFileMap.get(config));
     } catch (IOException e) {
       Bukkit.getLogger().severe("Could not save configuration '" + config.getName() + "'.");
     }
   }
   
   public void reloadConfigs() {
-    mainConfig = YamlConfiguration.loadConfiguration(mainConfigFile);
-    channelPointsConfig = YamlConfiguration.loadConfiguration(channelPointsConfigFile);
-    bitsConfig = YamlConfiguration.loadConfiguration(bitsConfigFile);
-    subsConfig = YamlConfiguration.loadConfiguration(subsConfigFile);
+    for (FileConfiguration fileConfiguration : configurationFileMap.keySet()) {
+      fileConfiguration = YamlConfiguration.loadConfiguration(configurationFileMap.get(fileConfiguration));
+    }
   }
 }

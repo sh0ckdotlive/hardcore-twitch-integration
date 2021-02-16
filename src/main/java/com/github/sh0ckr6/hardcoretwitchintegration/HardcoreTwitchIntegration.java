@@ -185,8 +185,8 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
   }
   
   private void registerConfigs() {
-    configManager = new ConfigManager();
-    configManager.setup(this);
+    configManager = new ConfigManager(this);
+    configManager.setup();
   }
   
   @Override
