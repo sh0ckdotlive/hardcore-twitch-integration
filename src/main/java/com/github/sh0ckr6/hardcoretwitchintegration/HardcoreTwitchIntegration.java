@@ -433,7 +433,7 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
         player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 99, false, true, true));
       });
-    } else if (cheer.amount == 6666) {
+    } else if (cheer.amount == 4200) {
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
         player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
         player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
@@ -445,6 +445,10 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
         player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
         player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
         player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+      });
+    } else if (cheer.amount == 6666) {
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.ENDER_DRAGON);
       });
     } else if (cheer.amount == 10000) {
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kill sh0ckR6"));
