@@ -381,6 +381,19 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
     if (redemption.rewardTitle.equalsIgnoreCase("Play a Sound")) {
       player.playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 1.0f, 1.5f);
     }
+    if (redemption.rewardTitle.equalsIgnoreCase("Bee")) {
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BEE);
+      });
+    }
+    if (redemption.rewardTitle.equalsIgnoreCase("Jumpscare")) {
+      player.sendMessage(ChatColor.RED + "Boo!" + ChatColor.GOLD + " ~ " + redemption.userName);
+      player.playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 1, 1);
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, 40, 99, true, false, false));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, 40, 99, true, false, false));
+      });
+    }
   }
   private void handleCheer(Cheer cheer) {
     player.sendMessage(ChatColor.GOLD + cheer.userName + ChatColor.GRAY + " has cheered " + (cheer.amount < 100 ? ChatColor.GRAY : cheer.amount < 1000 ? ChatColor.LIGHT_PURPLE : cheer.amount < 5000 ? ChatColor.GREEN : cheer.amount < 10000 ? ChatColor.BLUE : ChatColor.RED) + cheer.amount + ChatColor.GRAY + " bits!");
@@ -420,7 +433,7 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
         player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 99, false, true, true));
       });
-    } else if (cheer.amount == 6666) {
+    } else if (cheer.amount == 4200) {
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
         player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
         player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
@@ -432,6 +445,10 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
         player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
         player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
         player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
+      });
+    } else if (cheer.amount == 6666) {
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.ENDER_DRAGON);
       });
     } else if (cheer.amount == 10000) {
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kill sh0ckR6"));
