@@ -381,7 +381,11 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
     if (redemption.rewardTitle.equalsIgnoreCase("Play a Sound")) {
       player.playSound(player.getLocation(), Sound.ENTITY_CREEPER_PRIMED, 1.0f, 1.5f);
     }
-  }
+    if (redemption.rewardTitle.equalsIgnoreCase("Bee")) {
+      Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
+        player.getWorld().spawnEntity(player.getLocation(), EntityType.BEE);
+      });
+    }
   private void handleCheer(Cheer cheer) {
     player.sendMessage(ChatColor.GOLD + cheer.userName + ChatColor.GRAY + " has cheered " + (cheer.amount < 100 ? ChatColor.GRAY : cheer.amount < 1000 ? ChatColor.LIGHT_PURPLE : cheer.amount < 5000 ? ChatColor.GREEN : cheer.amount < 10000 ? ChatColor.BLUE : ChatColor.RED) + cheer.amount + ChatColor.GRAY + " bits!");
     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
