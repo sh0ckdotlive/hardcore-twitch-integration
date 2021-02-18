@@ -317,8 +317,8 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
       player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " frozen" + ChatColor.GRAY + " you for 30 seconds!");
       player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 200, 99, true, false, true));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 200, 199, true, false, true));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 600, 99, true, false, true));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 600, 199, true, false, true));
       });
     }
     if (redemption.rewardTitle.equalsIgnoreCase("Roll the Dice")) {
