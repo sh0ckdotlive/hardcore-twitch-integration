@@ -11,3 +11,7 @@ commands:
     description: send a message to the websocket server
   resub:
     description: send a resub message
+  pause:
+    description: pause all redemptions
+  unpause:
+    description: unpause all redemptions

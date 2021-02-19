@@ -4,11 +4,14 @@ import com.github.sh0ckr6.hardcoretwitchintegration.beans.ChannelPointRedemption
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.CheerEventBean;
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.EventSubNotificationBean;
 import com.github.sh0ckr6.hardcoretwitchintegration.beans.SubscriptionEventBean;
+import com.github.sh0ckr6.hardcoretwitchintegration.commands.PauseCommand;
 import com.github.sh0ckr6.hardcoretwitchintegration.commands.SubscribeCommand;
+import com.github.sh0ckr6.hardcoretwitchintegration.commands.UnpauseCommand;
 import com.github.sh0ckr6.hardcoretwitchintegration.gift.Gift;
 import com.github.sh0ckr6.hardcoretwitchintegration.listeners.MainListener;
 import com.github.sh0ckr6.hardcoretwitchintegration.managers.ConfigManager;
 import com.google.gson.Gson;
+import okhttp3.OkHttpClient;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -34,12 +37,13 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
   public boolean isPreventedFromBreaking;
   public boolean isPreventedFromInteracting;
   public List<Gift<?>> gifts = new ArrayList<>();
-  
-  private ConfigManager configManager;
+  public ConfigManager configManager;
+  public OkHttpClient okHttpClient;
   
   @Override
   public void onEnable() {
     // Plugin startup logic
+    okHttpClient = new OkHttpClient();
     getLogger().log(Level.INFO, "Successfully opened HardcoreTwitchIntegration");
     attemptWebSocketConnection();
     player = Bukkit.getOnlinePlayers().stream().filter(p -> p.getName().equalsIgnoreCase("sh0ckR6")).findFirst().get();
@@ -182,15 +186,17 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
   
   private void registerCommands() {
     new SubscribeCommand(this);
+    new PauseCommand(this);
+    new UnpauseCommand(this);
   }
   
   private void registerConfigs() {
     configManager = new ConfigManager(this);
+    configManager.createConfig("config");
   }
   
   @Override
   public void onDisable() {
-    // Plugin shutdown logic
   }
   
   @Override

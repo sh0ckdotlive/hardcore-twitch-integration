@@ -44,7 +44,7 @@ public class ConfigManager {
   public FileConfiguration getConfig(String name) {
     if (configurationFileMap.values().stream().noneMatch(file -> file.getName().equalsIgnoreCase(name + ".yml"))) return null;
     return YamlConfiguration.loadConfiguration(configurationFileMap.values().stream()
-            .filter(config -> config.getName().equalsIgnoreCase(name + ".yml"))
+            .filter(file -> file.getName().equalsIgnoreCase(name + ".yml"))
             .findFirst()
             .get());
   }
