@@ -42,11 +42,11 @@ public class ConfigManager {
   }
   
   public FileConfiguration getConfig(String name) {
-    if (configurationFileMap.keySet().stream().noneMatch(config -> config.getName().equalsIgnoreCase(name))) return null;
-    return configurationFileMap.keySet().stream()
-            .filter(config -> config.getName().equalsIgnoreCase(name))
+    if (configurationFileMap.values().stream().noneMatch(file -> file.getName().equalsIgnoreCase(name + ".yml"))) return null;
+    return YamlConfiguration.loadConfiguration(configurationFileMap.values().stream()
+            .filter(file -> file.getName().equalsIgnoreCase(name + ".yml"))
             .findFirst()
-            .get();
+            .get());
   }
   
   public void saveConfig(FileConfiguration config) {
