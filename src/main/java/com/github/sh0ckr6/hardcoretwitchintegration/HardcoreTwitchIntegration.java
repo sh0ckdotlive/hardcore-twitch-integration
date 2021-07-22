@@ -253,6 +253,7 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
     player = Bukkit.getOnlinePlayers().stream().filter(p -> p.getName().equalsIgnoreCase("sh0ckR6")).findFirst().get();
   }
   
+  // Handle subscriptions
   public void handleSubscription(Subscription sub) {
     List<Gift<?>> gifts = new ArrayList<>();
     for (Gift<?> gift :
@@ -290,6 +291,8 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
       player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 0.25f, 1);
     }
   }
+  
+  // Handle redemptions
   private void handleRedemption(ChannelPointRedemption redemption) {
     if (redemption.rewardTitle.equalsIgnoreCase("Spawn Creeper")) {
       player.sendMessage(ChatColor.GOLD + redemption.userName + ChatColor.GRAY + " has" + ChatColor.RED + " spawned a creeper" + ChatColor.GRAY + " on you!");
@@ -409,19 +412,21 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
       });
     }
   }
+  
+  // Handle cheers
   private void handleCheer(Cheer cheer) {
+    // Notify player of bits
     player.sendMessage(ChatColor.GOLD + cheer.userName + ChatColor.GRAY + " has cheered " + (cheer.amount < 100 ? ChatColor.GRAY : cheer.amount < 1000 ? ChatColor.LIGHT_PURPLE : cheer.amount < 5000 ? ChatColor.GREEN : cheer.amount < 10000 ? ChatColor.BLUE : ChatColor.RED) + cheer.amount + ChatColor.GRAY + " bits!");
     player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
     
-    if (cheer.amount == 69) {
+    if (cheer.amount == 69) { // Spawn snow golem and say "nice" (69 bits)
       player.sendMessage(ChatColor.GRAY + "nice");
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> player.getWorld().spawnEntity(player.getLocation(), EntityType.SNOWMAN));
-    } else if (cheer.amount == 100) {
-  
+    } else if (cheer.amount == 100) { // Give player 32 Iron Ore (100 bits)
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
         player.getInventory().addItem(new ItemStack(Material.IRON_ORE, 32));
       });
-    } else if (cheer.amount == 420) {
+    } else if (cheer.amount == 420) { // Spawn 10 blazes and say "Ayyyyyy" (420 bits)
       player.sendMessage(ChatColor.GRAY + "Ayyyyyy");
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
         player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
@@ -435,7 +440,7 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
         player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
         player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
       });
-    } else if (cheer.amount == 666) {
+    } else if (cheer.amount == 666) { // Spawn 5 witches (666 bits)
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
         player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
         player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
@@ -443,11 +448,11 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
         player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
         player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
       });
-    } else if (cheer.amount == 911) {
+    } else if (cheer.amount == 911) { // Give player regeneration 100 for 10 seconds (911 bits)
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
         player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 200, 99, false, true, true));
       });
-    } else if (cheer.amount == 4200) {
+    } else if (cheer.amount == 4200) { // Spawn 5 witches and 5 blazes (4200 bits)
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
         player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
         player.getWorld().spawnEntity(player.getLocation(), EntityType.WITCH);
@@ -460,11 +465,11 @@ public final class HardcoreTwitchIntegration extends JavaPlugin {
         player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
         player.getWorld().spawnEntity(player.getLocation(), EntityType.BLAZE);
       });
-    } else if (cheer.amount == 6666) {
+    } else if (cheer.amount == 6666) { // Spawn a scary ender dragon (6666 bits)
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> {
         player.getWorld().spawnEntity(player.getLocation(), EntityType.ENDER_DRAGON);
       });
-    } else if (cheer.amount == 10000) {
+    } else if (cheer.amount == 10000) { // Straight up just fucking kill the player like this: https://clips.twitch.tv/ConsiderateResoluteCobblerGOWSkull-20f6-cENnZyrMjRD (10000 bits)
       Bukkit.getScheduler().scheduleSyncDelayedTask(this, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "kill sh0ckR6"));
     }
   }
